@@ -19,6 +19,8 @@ Unattended build from `PROMPT.md`. Times are Athens (EET). Feature freeze 14:00,
 
 - 11:46–12:40 **front-page redesign** (human's notes after first view): gameplay only on `/`; the old page became `/lab`. New `games/chipgame.py`: each die = 3 physical qubits on `fake_brisbane`, player qubits + house "hearts" highlighted on a zoomed chip map, one circuit per roll through the noise model, one shot by default, entanglement level as the fraction of entangled rolls, fidelity from calibration, aggregate verifier. Measured first: the exact partially-entangled pure state is too deep for the noise model (102 two-qubit gates, 28 % equal faces), the shallow copy keeps 80 %; recorded in the module docstring. `PUBLIC_URL` support in `lan_url()`.
 
+- 12:50–13:10 human asked to go back to the previous page design as `/`, with only the Bosonic-entangled option and many shots: mode fixed to `BosonicEntangled`, 4096 shots per roll, new "Dice tomography" card (frequencies vs exact). The chip game stays at `/chip`.
+
 ## Keys present in this build
 `ANTHROPIC_API_KEY` (Q-Scientist, Host, Logic designer fallback, Financial summary), `FAL_KEY` (art, voice-over), `OUMI_API_KEY` + `OUMI_PROJECT_ID` (no deployment to call). `IBM_QUANTUM_TOKEN` empty on purpose ("no real QPU for the demo"). `DISCORD_WEBHOOK_URL` empty.
 

@@ -19,10 +19,11 @@ from games.qraps.modes import CROSS_RULE, MODES
 from verifier import core
 
 COMMIT_WINDOW = 1.5
+SHOTS = 4096          # many shots per roll: the outcome statistics are shown as the dice tomography panel
 REVEAL_TIMEOUT = 20.0
 STAKE = 5
 _lock = threading.RLock()
-_T = {"mode": "Classical", "rounds": {}, "craps": {}, "next_round": None, "decisions": {}, "purchases": {}, "last_chip": None,
+_T = {"mode": "BosonicEntangled", "rounds": {}, "craps": {}, "next_round": None, "decisions": {}, "purchases": {}, "last_chip": None,
       "vote": None, "last_result": None}
 AGENT_PARTICIPANTS = ["agent:q_scientist", "agent:logic_designer", "agent:lab_agent", "agent:host"]
 
@@ -173,7 +174,7 @@ def _run_circuit(r: dict, seed: int) -> dict:
         lab.gate_emulator(f"round {r['id']}")
         tc = circuits.table_circuit(d["circuit"], n_players, rule)
         registry.set_status("lab_agent", "working", "Aer emulator", f"{tc.num_qubits} qubits")
-        out = run_statevector(tc, 1024, seed=seed)
+        out = run_statevector(tc, SHOTS, seed=seed)
         stated = circuits.expected_table(MODES[mode], n_players, rule)
         ex = core.check_expectation(out["exact"], stated)
         cc = core.check_counts(out["counts"], out["exact"])
@@ -241,7 +242,15 @@ def _run_round(rid: int) -> None:
             "reveals": reveals, "dropped": dropped, "counts": run["counts"], "seed": seed, "selected": chosen, "output": output,
             "faces": faces, "badge": run["badge"],
             "verifier": {k: run.get(k) for k in ("expectation", "counts_check", "correlation", "commit_recheck")}})
-        res = {"round": rid, "faces": faces, "badge": run["badge"], "engine": run["engine"], "output": output, "n_qubits": run["n_qubits"],
+        tomo = None
+        if run["engine"] == "Aer emulator":
+            freq, exact_p, tot = {}, {}, sum(run["counts"].values())
+            for bs, c in run["counts"].items():
+                f = circuits.decode(bs, run["n_players"]); k = f"{f[0]}-{f[1]}"; freq[k] = freq.get(k, 0) + c / tot
+            for (a, b), pr in modes.pair_dist(r["mode"]).items():
+                exact_p[f"{a}-{b}"] = float(pr)
+            tomo = {"shots": tot, "freq": freq, "exact": exact_p, "basis": "computational"}
+        res = {"round": rid, "faces": faces, "badge": run["badge"], "engine": run["engine"], "output": output, "n_qubits": run["n_qubits"], "tomography": tomo,
                "verifier": rec["verifier"], "seconds": run.get("seconds"), "rule": CROSS_RULE[r["mode"]], "mode": r["mode"],
                "dropped": len(dropped), "beacon_hash": rec["hash"]}
         res.update(_craps_update(r, faces))

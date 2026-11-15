@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantum Table</title>
+<link rel="stylesheet" href="/static/style.css">
+<link rel="stylesheet" href="/static/game.css">
+</head>
+<body class="game">
+<header class="game-head">
+  <h1>Quantum Table</h1>
+  <nav class="small"><button id="qrbtn" class="ghost">Join QR</button> <a href="/lab" class="more">More</a></nav>
+</header>
+
+<main class="game-main">
+  <section class="card tablecol">
+    <div id="badge" class="badge idle">no roll yet</div>
+    <div id="table3d" class="table3d hidden"></div>
+    <div id="table2d" class="table2d">
+      <div class="felt rules">
+        <div class="rules-text">PASS LINE · 7 or 11 wins · 2, 3, 12 loses · any other total is your point: roll it again before a 7</div>
+        <div class="dice-row house"><span class="who">house</span><div class="die" id="h0"></div><div class="die" id="h1"></div></div>
+        <div class="thread" id="thread"></div>
+        <div class="dice-row player"><span class="who" id="me-label">you</span><div class="die" id="p0"></div><div class="die" id="p1"></div></div>
+      </div>
+    </div>
+    <div class="row controls">
+      <button id="roll" class="big">Roll</button>
+      <button id="join" class="big alt">Join</button>
+      <label class="switch small"><input type="checkbox" id="shots100"> 100 shots (majority face)</label>
+    </div>
+    <div id="result" class="result"></div>
+    <div class="row meters small">
+      <label>Entanglement level <input type="range" id="level" min="0" max="100" value="100"> <b id="levelval">100 %</b></label>
+      <span class="meter-mini"><span id="levelbar"></span></span>
+      <span id="fid" class="muted">fidelity: –</span>
+    </div>
+  </section>
+
+  <section class="card chipcol">
+    <h2 class="small muted" id="chip-title">Chip: fake_brisbane · Simulated chip (fake backend)</h2>
+    <svg id="chip" class="chipmap game" viewBox="-1 -1 14 3" preserveAspectRatio="xMidYMid meet"></svg>
+    <div id="legend" class="small muted">Each die = 3 physical qubits. Join to get your 6 qubits; the house's six entangled partners are the red hearts.</div>
+    <div id="seatsmini" class="small"></div>
+  </section>
+</main>
+
+<details class="fold"><summary>How a roll works</summary>
+  <p class="small">(1) The house die is prepared as a uniform superposition over faces 1–6 on 3 qubits; your die is a CNOT copy of it (entangled circuit) or an independent uniform die, chosen per roll by the level above (the fraction of rolls that use the entangled circuit, drawn by the emulator's seeded RNG). (2) The circuit is transpiled to your physical qubits and run once through the noise model of the fake backend's calibration; the fidelity shown is the product of (1 − error) over every gate and readout it used. (3) The dice animate to the measured faces. A reading of level 7 or 8 is a misfire: no result. One shot cannot be chi-square tested, so the verifier checks the exact circuit distribution on every roll and runs chi-square and TVD on the aggregate of all rolls with the same settings.</p>
+</details>
+<details class="fold"><summary>AI host</summary><ul id="ticker" class="small"></ul></details>
+<details class="fold"><summary>Everything else: burn-down, chip pricing, Gatekeeper, Hype or Fact, quantum vote, beacon</summary>
+  <p class="small">These live on the <a href="/lab">lab page</a> and the <a href="/table">projector view</a>. Beacon: <a href="/beacon/latest">latest record</a> · <a href="/verify_beacon.py">verify_beacon.py</a>.</p>
+</details>
+
+<div id="qrmodal" class="modal hidden" role="dialog"><div class="modal-box"><img id="qr" alt="QR to join" width="260" height="260"><div id="joinurl" class="mono small"></div><button id="qrclose" class="ghost">Close</button></div></div>
+
+<footer class="small muted">Qredits are play credits with no cash value. Engine: Simulated chip (fake backend). Qraps idea from the original Qraps (Quantum Game Jam 2021). <span id="gate-credit2">Quantum Time Gatekeeper, powered by ADAP's policy engine</span>. <a href="/making-of">How this was made</a>.</footer>
+<script src="/static/chip.js"></script>
+</body>
+</html>

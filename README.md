@@ -12,8 +12,9 @@ A team of AI agents designs and runs quantum dice games. The first game is **Qra
 
 That creates `.venv`, installs `requirements.txt`, builds ADAP's policy engine if Node 22+ and pnpm 10+ are present, and starts on `0.0.0.0:$PORT` (default 8080). Open `http://<host>:8080/`.
 
-- `/` **the game, nothing else**: a craps table (3D by default; `?view=2d`, and the automatic fallback without WebGL) next to the chip map zoomed to the qubits in use. Join → your 6 qubits light up in your colour, the house's six entangled partners are red hearts. Roll → a circuit really runs (see below). Below the fold: how a roll works, the AI host, links to the rest.
-- `/lab` everything behind the table: burn-down meter, chip pricing and buy-in, Quantum Time Gatekeeper, Hype or Fact, quantum vote, beacon rounds, the five original Qraps modes, Bloch-sphere dice
+- `/` the table (3D by default; `?view=2d`, and the automatic fallback without WebGL). **One game: Bosonic dice entangled to the house** (the original Qraps `BosonicEntangled` table: doubles only, player dice equal the house dice). Every roll runs **4096 shots** on the Aer emulator; one shot picked by the beacon rule decides the faces, and the whole sample is shown in the **Dice tomography** card (measured frequency per pair vs the exact probability; Bloch arrows from the reduced density matrices). Measurement statistics in one basis, not full state tomography, and it says so. The rest of the page: agent strip, burn-down, chip map and buy-in, Gatekeeper, Hype or Fact, quantum vote, join QR, AI host.
+- `/chip` the alternative front page built earlier today: gameplay only, each die as 3 physical qubits with the house "hearts" on the chip map, one circuit per roll through the fake backend's noise model, one shot (`games/chipgame.py`)
+- `/lab` same as `/`
 - `/join` seats a player (nickname only, 100 Qredits, nothing personal stored); the Join QR is behind the small button on the front page
 - `/table` the projector view
 - `/beacon/latest`, `/beacon/{round}` the public records; `verify_beacon.py` re-checks them

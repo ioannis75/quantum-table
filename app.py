@@ -377,7 +377,12 @@ def join_page():
 
 @app.get("/lab")
 def lab_page():
-    return FileResponse(ROOT / "static" / "lab.html")
+    return FileResponse(ROOT / "static" / "index.html")
+
+
+@app.get("/chip")
+def chip_page():
+    return FileResponse(ROOT / "static" / "chip.html")
 
 
 # ---- the front-page game (games/chipgame.py) ---------------------------------------------------------
