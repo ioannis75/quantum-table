@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantum Table</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1>Quantum Table <small>Qraps: quantum craps</small></h1>
+  <div id="clock" class="muted"></div>
+</header>
+
+<section id="team" class="strip" aria-label="agent team"></section>
+
+<main>
+  <section class="card table-card">
+    <div class="row between">
+      <div>
+        <label>Mode
+          <select id="mode"></select>
+        </label>
+        <span id="rule" class="muted"></span>
+      </div>
+      <div id="badge" class="badge idle">no roll yet</div>
+    </div>
+    <div id="table3d" class="table3d hidden"></div>
+    <div id="table2d" class="table2d">
+      <div class="felt">
+        <div class="dice-row house"><span class="who">house</span><div class="die" id="h0"></div><div class="die" id="h1"></div></div>
+        <div class="thread" id="thread"></div>
+        <div class="dice-row player"><span class="who" id="me-label">you</span><div class="die" id="p0"></div><div class="die" id="p1"></div></div>
+        <div class="bloch-row" id="bloch"></div>
+      </div>
+    </div>
+    <div class="row">
+      <button id="roll" class="big">Roll</button>
+      <button id="join" class="big alt">Join table</button>
+      <button id="skip" class="ghost">Skip ahead</button>
+      <button id="decide" class="ghost">Decide something</button>
+    </div>
+    <div id="result" class="result"></div>
+    <p class="small muted">Order of events: (1) the circuit runs and the verifier checks it, (2) the measured faces are known, (3) the dice animate and land on the measured faces. The tumble is choreography; the randomness is the measurement. <span id="entangled-label"></span></p>
+    <details><summary>Design (Q-Scientist) and odds (Logic designer)</summary><pre id="design" class="small"></pre></details>
+  </section>
+
+  <section class="card">
+    <h2>Burn-down <span class="muted small">statevector memory = 16 bytes × 2ⁿ</span></h2>
+    <div class="meter-wrap">
+      <div class="meter" id="meter"></div>
+      <div class="marks" id="marks"></div>
+    </div>
+    <div id="meter-text" class="small"></div>
+    <p class="small muted">This is the cost of exact statevector simulation, not of every classical method. Engine for this phase: <b id="phase-engine"></b></p>
+  </section>
+
+  <section class="card">
+    <h2>Chip map <span class="muted small" id="chip-label"></span></h2>
+    <svg id="chip" viewBox="-1 -1 17 15" class="chipmap"></svg>
+    <div class="small" id="chip-info"></div>
+    <div class="row">
+      <button id="buy" class="alt">Buy chosen pair</button>
+      <button id="chiprun">Run chip job</button>
+      <button id="overspend" class="ghost">Try to overspend</button>
+      <button id="bigjob" class="ghost">Ask for a 100,000-shot job</button>
+      <button id="charge" class="ghost">Try to charge a player</button>
+    </div>
+    <div id="chipres" class="small"></div>
+  </section>
+
+  <section class="card">
+    <h2>Quantum Time Gatekeeper <span class="muted small" id="gate-credit"></span></h2>
+    <div id="gatelog" class="small"></div>
+    <div id="waiting"></div>
+  </section>
+
+  <section class="card">
+    <h2>Hype or Fact <span class="muted small">the experiment decides</span></h2>
+    <div id="hype"></div>
+    <div class="row">
+      <button id="deal" class="ghost">Deal a card</button>
+      <button id="bet-fact" class="alt">Fact (5 Qredits)</button>
+      <button id="bet-hype" class="alt">Hype (5 Qredits)</button>
+      <button id="resolve">Run the experiment</button>
+    </div>
+    <div id="hype-score" class="small muted"></div>
+  </section>
+
+  <section class="card">
+    <h2>Quantum vote <span class="muted small">a vote sampled from qubits; no quantum advantage claimed</span></h2>
+    <button id="vote" class="ghost">Let the agents vote on the mode</button>
+    <pre id="vote-out" class="small"></pre>
+  </section>
+
+  <section class="card">
+    <h2>Join <span class="muted small">scan, pick a nickname, 100 Qredits</span></h2>
+    <div class="row"><img id="qr" alt="QR to join" width="180" height="180"><div><div id="joinurl" class="mono"></div><div id="seats" class="small"></div></div></div>
+    <p class="small"><a href="/table" target="_blank">Projector view</a> · <a href="/beacon/latest" target="_blank">Beacon: latest record</a> · <a href="/verify_beacon.py">verify_beacon.py</a> — Don't trust us. Check it.</p>
+  </section>
+
+  <section class="card">
+    <h2>AI host <span class="muted small">live commentary · <span id="corrected"></span></span></h2>
+    <ul id="ticker"></ul>
+  </section>
+</main>
+
+<footer class="small muted">
+  Qredits are play credits with no cash value. Engines: Aer emulator · Simulated chip (fake backend) · IBM backend + job ID · Recorded run.
+  Qraps modes from the original Qraps (Quantum Game Jam 2021, <a href="https://github.com/SuperStingray/qraps">SuperStingray/qraps</a>); circuits and cross-table rules are our reconstruction.
+  <span id="gate-credit2"></span>. Art: <span id="art"></span>. <a href="/making-of">How this was made</a>.
+</footer>
+<script src="/static/app.js"></script>
+</body>
+</html>

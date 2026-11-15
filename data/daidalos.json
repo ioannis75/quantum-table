@@ -1,0 +1,5 @@
+{"label": "Daidalos (Greek EuroHPC system)", "bytes": null,
+ "note": "No official total-memory figure found on 15 Nov 2026. GRNET's tender spec gives only a minimum of 2 GB per core; performance reports give 85.69 PFlop/s sustained (TOP500 rank 31). Shown without a memory number.",
+ "sources": ["https://grnet.gr/wp-content/uploads/2022/11/01_Techical_Specifications_DAEDALUS.2022.12.01.pdf",
+             "https://eurohpc-ju.europa.eu/daedalus-call-acquire-new-european-world-class-supercomputer-greece-2024-06-25_en",
+             "https://greekcitytimes.com/2026/10/19/greece-launches-supercomputer-ranked-31st-worldwide/"]}

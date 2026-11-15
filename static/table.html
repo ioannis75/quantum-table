@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantum Table — projector</title>
+<link rel="stylesheet" href="/static/style.css">
+<style>body{font-size:22px}main{grid-template-columns:2fr 1fr}.die{width:110px;height:110px;padding:14px}h1{font-size:2.4rem}.badge{font-size:1.4rem}#ticker li{font-size:1.3rem}.claim{font-size:1.6rem}</style>
+</head><body>
+<header><h1>Quantum Table <small>projector view</small></h1><div id="clock" class="muted"></div></header>
+<main>
+  <section class="card">
+    <div class="row between"><div id="rule"></div><div id="badge" class="badge idle">no roll yet</div></div>
+    <div class="felt">
+      <div class="dice-row house"><span class="who">house</span><div class="die" id="h0"></div><div class="die" id="h1"></div></div>
+      <div class="thread" id="thread"></div>
+      <div class="dice-row player"><span class="who">player</span><div class="die" id="p0"></div><div class="die" id="p1"></div></div>
+    </div>
+    <div id="result" class="result"></div>
+    <h2>Burn-down</h2>
+    <div class="meter-wrap"><div class="meter" id="meter"></div><div class="marks" id="marks"></div></div>
+    <div id="meter-text"></div>
+    <div id="hype"></div>
+  </section>
+  <section class="card">
+    <h2>Seats</h2><div id="seats"></div>
+    <div class="row"><img id="qr" alt="QR to join" width="220" height="220"><div id="joinurl" class="mono"></div></div>
+    <h2>Last rolls</h2><div id="lastrolls" class="small"></div>
+    <h2>AI host</h2><ul id="ticker"></ul>
+  </section>
+</main>
+<footer class="small muted">Qredits: play credits, no cash value. <span id="gate-credit2"></span></footer>
+<script>window.PROJECTOR=true</script>
+<script src="/static/app.js"></script>
+</body></html>
