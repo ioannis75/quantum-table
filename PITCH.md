@@ -1,6 +1,6 @@
 # PITCH.md — Quantum Table (3 minutes, English)
 
-**Disclosure sentence (say it once):** The dice, the verifier, the emulator runs, the beacon and the policy gate are real; the chip in this demo is a simulated fake backend, the art and the voice are AI-generated, and the Logic designer ran on a Claude fallback because the Oumi project had no deployed model.
+**Disclosure sentence (say it once):** The dice, the verifier, the emulator runs, the beacon and the policy gate are real; the chip in this demo is a simulated fake backend, the art and the voice are AI-generated, and the Logic designer runs on a small Oumi-hosted model (deployment 2); exact code checks its answers and corrects them on screen.
 
 ## Script with timings
 
@@ -10,9 +10,9 @@
 | 0:15 | "Tap Roll. First the circuit runs and a verifier checks it. Only then the dice land, on the faces that were measured." | Roll → VERIFIED badge |
 | 0:30 | "Join, and your dice are entangled with the house pair. The six arrows above your dice shrink to the centre: each qubit alone has no state of its own. After the roll they snap to the poles that spell your face. These arrows are computed from the real statevector, not drawn to look nice." | Join → thread → Roll |
 | 0:55 | "Every player adds six qubits. Exact simulation needs 16 bytes times 2 to the n. On this machine the emulator ran 29 qubits and was refused at 30. Skip ahead: the emulator burns down and the chip takes over." | Skip ahead → meter |
-| 1:15 | "On the chip you buy a coupled pair with Qredits, priced from its calibration error. All pairs go in one job. Results come back per pair with error bars, compared by distance, never with a chi-square against the ideal. Today the chip is a simulated fake backend, and the screen says so." | Chip map → Run chip job |
-| 1:40 | "Real quantum time costs money, so no agent may submit on its own. The Quantum Time Gatekeeper, powered by ADAP's policy engine, allows up to 10 seconds, asks a person up to 60, blocks beyond. Try to overspend: BLOCK. Try to charge a player: BLOCK. There is no payment code in this build." | Overspend → Charge |
-| 2:05 | "Between rolls the AI host deals a claim: 'entangled dice let you message the house instantly.' Bet Fact or Hype. The experiment runs: the house's distribution moves by 4 times 10 to the minus 16. Verdict: Hype. The verifier decides, not the host." | Hype or Fact |
+| 1:15 | "On the chip you buy a coupled pair with Qredits, priced from its calibration error. All pairs go in one job. Results come back per pair with error bars, compared by distance, never with a chi-square against the ideal. Today the chip is a simulated fake backend, and the screen says so." | Chip map → Run chip job (under *Extended: future plan*) |
+| 1:40 | "Real quantum time costs money, so no agent may submit on its own. The Quantum Time Gatekeeper, powered by ADAP's policy engine, allows up to 10 seconds, asks a person up to 60, blocks beyond. Try to overspend: BLOCK. Try to charge a player: BLOCK. There is no payment code in this build." | Overspend → Charge (under *Extended: future plan*) |
+| 2:05 | "Between rolls the AI host deals a claim: 'entangled dice let you message the house instantly.' Bet Fact or Hype. The experiment runs: the house's distribution moves by 4 times 10 to the minus 16. Verdict: Hype. The verifier decides, not the host." | Hype or Fact (under *Extended: future plan*) |
 | 2:30 | "And every roll is a public record: each participant commits a secret, the quantum counts are published, the selection is a fixed rule. Run verify_beacon.py: PASS. Collectively generated, publicly checkable. Not certified, not for money or elections; the real thing is NIST's CURBy. This is its playful cousin." | /beacon/latest → PASS |
 | 2:50 | **Closing beat:** "This project was made the way the game works: a person's ideas, agents doing the building, and checks deciding what stayed. The AI wrote the circuits; the verifier passed them. The AI host wrote the commentary; a checker read every line. Thank you." | MAKING_OF link |
 

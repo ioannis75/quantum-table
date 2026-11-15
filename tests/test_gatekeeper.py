@@ -56,9 +56,10 @@ def test_one_door_for_the_token():
     """Exactly one function may read IBM_QUANTUM_TOKEN: engines/ibm.py. No second use anywhere in the codebase."""
     hits = []
     for p in ROOT.rglob("*"):
-        if p.suffix not in (".py", ".js", ".mjs", ".html", ".sh", ".md") or any(x in p.parts for x in (".venv", "vendor", "node_modules", ".git", "static")):
+        # code only: documentation may name the variable, code may read it in exactly one place
+        if p.suffix not in (".py", ".js", ".mjs", ".html", ".sh") or any(x in p.parts for x in (".venv", "vendor", "node_modules", ".git", "static")):
             continue
-        if p.name in ("PROMPT.md", "README.md", "HACKATHON.md", "PITCH.md", "MAKING_OF_NOTES.md", "run.sh", "config.py", "test_gatekeeper.py"):
+        if p.name in ("run.sh", "config.py", "test_gatekeeper.py"):
             continue
         txt = p.read_text(errors="ignore")
         if "IBM_QUANTUM_TOKEN" in txt:

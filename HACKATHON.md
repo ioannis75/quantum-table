@@ -1,6 +1,6 @@
 # HACKATHON.md — build log, Quantum Table (Sunday 15 Nov 2026)
 
-Unattended build from `PROMPT.md`. Times are Athens (EET). Feature freeze 14:00, submission 18:00.
+Unattended build from `PROMPT.md`. Times are Athens (EET). Code freeze 18:00 (moved by organisers from 14:00), submission 17:50.
 
 ## Timeline
 - 03:54 start. Machine: 16.9 GB RAM, 4 cores, Python 3.13.18, Node 22.23, pnpm 10.28, qiskit 2.6.2 / qiskit-aer 0.18.2 / qiskit-ibm-runtime 0.52.1.
@@ -19,14 +19,17 @@ Unattended build from `PROMPT.md`. Times are Athens (EET). Feature freeze 14:00,
 
 - 11:46–12:40 **front-page redesign** (human's notes after first view): gameplay only on `/`; the old page became `/lab`. New `games/chipgame.py`: each die = 3 physical qubits on `fake_brisbane`, player qubits + house "hearts" highlighted on a zoomed chip map, one circuit per roll through the noise model, one shot by default, entanglement level as the fraction of entangled rolls, fidelity from calibration, aggregate verifier. Measured first: the exact partially-entangled pure state is too deep for the noise model (102 two-qubit gates, 28 % equal faces), the shallow copy keeps 80 %; recorded in the module docstring. `PUBLIC_URL` support in `lan_url()`.
 
-- 12:50–13:10 human asked to go back to the previous page design as `/`, with only the Bosonic-entangled option and many shots: mode fixed to `BosonicEntangled`, 4096 shots per roll, new "Dice tomography" card (frequencies vs exact). The chip game stays at `/chip`.
+- 12:50–13:10 human asked to go back to the previous page design as `/`, with only the Bosonic-entangled option and many shots: mode fixed to `BosonicEntangled`, 4096 shots per roll (trimmed to 1024 at 13:15), new "Dice tomography" card (frequencies vs exact). The chip game stays at `/chip`.
 
 - 13:00–13:15 demo trim: agent strip moved to a "Credits: the AI team that built this game" section; 1024 shots per roll; chip map, Gatekeeper, Hype or Fact, quantum vote and AI host folded into "Extended: future plan" (still working, one click away). `boxd_update.sh` added.
 
 - 13:20 **Oumi live**: deployment 2 of project 7HBTQDVH6J-14 at `https://inference.oumi.ai/v1` (new `OUMI_BASE_URL`). First answer was `needs_clarification` because the task sat only in the system prompt; the user message is now self-contained and Iris returns the full contract in ~3.5 s. Its predictions were classical-dice fractions for the Bosonic-entangled table; the kit evaluates the propositions on the real state and the mismatch is shown and counted as "Logic designer corrected".
 
+- 16:45–17:30 final consistency pass from `FINAL_CODE_INSTRUCTIONS.md`: docs brought in line (Oumi live, 18:00 freeze, pitch rows), Oumi proof re-run, live-demo health check, optional step 1 of the agree round on branch `byzantine`.
+- **Oumi proof (16:50):** Logic designer call for `BosonicEntangled` through the app: answering model shown as "Oumi (deployment 2)", valid contract JSON, latency ≈3.5 s, kit correction shown (`corrected: True`: model predicted 8/36 for win, kit 0).
+
 ## Keys present in this build
-`ANTHROPIC_API_KEY` (Q-Scientist, Host, Logic designer fallback, Financial summary), `FAL_KEY` (art, voice-over), `OUMI_API_KEY` + `OUMI_PROJECT_ID` (no deployment to call). `IBM_QUANTUM_TOKEN` empty on purpose ("no real QPU for the demo"). `DISCORD_WEBHOOK_URL` empty.
+`ANTHROPIC_API_KEY` (Q-Scientist, Host, Logic designer fallback, Financial summary), `FAL_KEY` (art, voice-over), `OUMI_API_KEY` + `OUMI_PROJECT_ID` + `OUMI_DEPLOYMENT_ID=2` + `OUMI_MODEL` + `OUMI_BASE_URL=https://inference.oumi.ai/v1` (live, see 13:20). `IBM_QUANTUM_TOKEN` empty on purpose ("no real QPU for the demo"). `DISCORD_WEBHOOK_URL` empty.
 
 ## Faked or mocked (what did NOT run for real)
 - **Front-page chip**: every roll runs on `AerSimulator.from_backend(FakeBrisbane)` with the stored calibration snapshot, never on a QPU; the label says "Simulated chip (fake backend noise model, fake_brisbane)". The fidelity number is a product of calibration errors, not a measured fidelity. Misfires (levels 7/8) are real consequences of that noise model. The "entanglement level" is a per-roll mixture of two circuits, not a continuously tuned entangling angle (reason in the log above).
@@ -43,7 +46,6 @@ Unattended build from `PROMPT.md`. Times are Athens (EET). Feature freeze 14:00,
 
 ## Untested code paths (written, not exercised)
 - `engines/ibm._run_ibm()` (SamplerV2 submission, usage read-back) — no token, and `docs.quantum.ibm.com` was not reachable to confirm the current interface.
-- `agents/llm.oumi_ask()` against a real deployment — the call path was exercised (400/404 answers from the API), never a successful completion.
 - The Iris output-contract parser (`agents/logic_designer.parse_expr/normalise`) is unit-tested on synthetic input only.
 
 ## Decisions ("our reconstruction")
