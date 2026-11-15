@@ -99,6 +99,14 @@ def normalise(stm: dict) -> dict:
 _cache: dict = {}
 
 
+def user_message(mode: str) -> str:
+    return (f"Task: craps pass line for the dice mode '{mode}'. The two dice are die 0 and die 1; each roll the pair "
+            f"(die 0, die 1) is uniform over exactly these face pairs: {MODES[mode]}. Rules: at the come-out a total of 7 or 11 "
+            f"wins, 2, 3 or 12 loses, any other total (4, 5, 6, 8, 9, 10) becomes the point. Write the propositions win, lose, "
+            f"point_4, point_5, point_6, point_8, point_9, point_10 in the expr grammar, the prob queries for each, and your "
+            f"prediction as exact fractions. Reply with the single JSON object only.")
+
+
 def _scripted() -> dict:
     s = lambda n: {"atom": "sum", "n": n}
     return {"win": {"op": "or", "args": [s(7), s(11)]},
@@ -113,7 +121,7 @@ def statements(mode: str) -> dict:
     stm, source = None, "scripted statements"
     for fn, tag in ((llm.oumi_ask, ""), (lambda s, u, **k: llm.anthropic_ask(s, u, "smart", 2500, timeout=60), "fallback")):
         try:
-            text, label = fn(SYSTEM, f"Mode {mode}. Pairs: {MODES[mode]}")
+            text, label = fn(SYSTEM, user_message(mode))
             m = re.search(r"\{.*\}", text, re.S)
             stm = normalise(json.loads(m.group(0)))
             source = label if not tag else label.replace("Claude (", "Claude (fallback, ")
@@ -147,7 +155,23 @@ def statements(mode: str) -> dict:
     for n in (4, 5, 6, 8, 9, 10):
         node = stm.get("points", {}).get(str(n), {"atom": "sum", "n": n})
         points[n] = evaluate(node, (n,))[0]
-    out = {"mode": mode, "source": source, "statements": stm, "prediction": stm.get("prediction", {}), "p_win_comeout": win, "p_lose_comeout": lose,
+    # the model's own prediction is checked against the kit; a mismatch is shown as "Logic designer corrected"
+    from fractions import Fraction
+    pred_checks = []
+    kit_vals = {"win": win, "lose": lose, **{f"point_{n}": v for n, v in points.items()}}
+    for name, val in (stm.get("prediction") or {}).items():
+        if name not in kit_vals or not isinstance(val, str) or "/" not in val:
+            continue
+        try:
+            pv = float(Fraction(val))
+        except Exception:
+            continue
+        ok = abs(pv - kit_vals[name]) < 1e-9
+        pred_checks.append({"name": name, "model": val, "kit": kit_vals[name], "ok": ok})
+        if not ok:
+            corrected.append({"name": name, "model_prediction": val, "kit": kit_vals[name]})
+            db.bump("logic_corrected")
+    out = {"mode": mode, "source": source, "statements": stm, "prediction": stm.get("prediction", {}), "prediction_checks": pred_checks, "p_win_comeout": win, "p_lose_comeout": lose,
            "p_point": points, "corrected": corrected, "corrected_flag": bool(corrected),
            "pass_line_win_exact": float(modes.craps_win_probability(mode))}
     _cache[mode] = out

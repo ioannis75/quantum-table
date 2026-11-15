@@ -23,12 +23,14 @@ Unattended build from `PROMPT.md`. Times are Athens (EET). Feature freeze 14:00,
 
 - 13:00–13:15 demo trim: agent strip moved to a "Credits: the AI team that built this game" section; 1024 shots per roll; chip map, Gatekeeper, Hype or Fact, quantum vote and AI host folded into "Extended: future plan" (still working, one click away). `boxd_update.sh` added.
 
+- 13:20 **Oumi live**: deployment 2 of project 7HBTQDVH6J-14 at `https://inference.oumi.ai/v1` (new `OUMI_BASE_URL`). First answer was `needs_clarification` because the task sat only in the system prompt; the user message is now self-contained and Iris returns the full contract in ~3.5 s. Its predictions were classical-dice fractions for the Bosonic-entangled table; the kit evaluates the propositions on the real state and the mismatch is shown and counted as "Logic designer corrected".
+
 ## Keys present in this build
 `ANTHROPIC_API_KEY` (Q-Scientist, Host, Logic designer fallback, Financial summary), `FAL_KEY` (art, voice-over), `OUMI_API_KEY` + `OUMI_PROJECT_ID` (no deployment to call). `IBM_QUANTUM_TOKEN` empty on purpose ("no real QPU for the demo"). `DISCORD_WEBHOOK_URL` empty.
 
 ## Faked or mocked (what did NOT run for real)
 - **Front-page chip**: every roll runs on `AerSimulator.from_backend(FakeBrisbane)` with the stored calibration snapshot, never on a QPU; the label says "Simulated chip (fake backend noise model, fake_brisbane)". The fidelity number is a product of calibration errors, not a measured fidelity. Misfires (levels 7/8) are real consequences of that noise model. The "entanglement level" is a per-roll mixture of two circuits, not a continuously tuned entangling angle (reason in the log above).
-- **Logic designer: Oumi deployment not available, Claude fallback.** Project 7HBTQDVH6J-14 has no deployed model (API lists 0 models, 0 deployments); the UI shows "Claude (fallback, claude-sonnet-5-5)". When Iris is deployed, only `OUMI_DEPLOYMENT_ID` / `OUMI_MODEL` in `.env` change.
+- **Logic designer**: now on **Oumi (deployment 2)** via `inference.oumi.ai`; Claude remains the fallback and is labelled "Claude (fallback, …)" when used. The model writes the propositions; all probabilities come from the kit; its own predictions are checked and corrected on screen.
 - **Host**: Claude Haiku lines when the 5-second budget allows, templates otherwise (most lines in a busy round are templates). The checker runs on every line including templates; it caught one template during tests ("no quantum advantage claimed"), reworded.
 - **Hype or Fact cards**: seed deck + two scripted stand-in cards first; AI-written cards (Claude Haiku) from every third deal, validated by running them before they reach the table.
 - **Quantum vote confidences**: scripted from exact numbers; with more time the agents would supply them from their own answers.

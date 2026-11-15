@@ -27,10 +27,10 @@ def oumi_ask(system: str, user: str, max_tokens: int = 700, timeout: float = 25.
     # Oumi (OpenAI-compatible): model = projects/{project}/deployments/{deployment} (OUMI_MODEL, or built from the ids)
     model = os.environ.get("OUMI_MODEL") or f"projects/{os.environ['OUMI_PROJECT_ID']}/deployments/{os.environ['OUMI_DEPLOYMENT_ID']}"
     from openai import OpenAI
-    c = OpenAI(base_url="https://api.oumi.ai/inference/v1", api_key=os.environ["OUMI_API_KEY"], timeout=timeout)
+    c = OpenAI(base_url=os.environ.get("OUMI_BASE_URL", "https://api.oumi.ai/inference/v1"), api_key=os.environ["OUMI_API_KEY"], timeout=timeout)
     r = c.chat.completions.create(model=model, max_tokens=max_tokens,
                                   messages=[{"role": "system", "content": system}, {"role": "user", "content": user}])
-    return r.choices[0].message.content, "Oumi (" + model.rsplit("/", 1)[-1] + ")"
+    return r.choices[0].message.content, "Oumi (deployment " + model.rsplit("/", 1)[-1] + ")"
 
 
 def ask_with_fallback(chain: list, system: str, user: str, **kw):
