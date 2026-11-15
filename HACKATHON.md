@@ -17,10 +17,13 @@ Unattended build from `PROMPT.md`. Times are Athens (EET). Feature freeze 14:00,
 - 04:59 Oumi status (from the platform side): no deployment exists yet; ids left empty. Logic designer parser made tolerant of the planned Iris contract; Claude fallback labelled "Claude (fallback, …)".
 - 05:10 final test run, docs, commit.
 
+- 11:46–12:40 **front-page redesign** (human's notes after first view): gameplay only on `/`; the old page became `/lab`. New `games/chipgame.py`: each die = 3 physical qubits on `fake_brisbane`, player qubits + house "hearts" highlighted on a zoomed chip map, one circuit per roll through the noise model, one shot by default, entanglement level as the fraction of entangled rolls, fidelity from calibration, aggregate verifier. Measured first: the exact partially-entangled pure state is too deep for the noise model (102 two-qubit gates, 28 % equal faces), the shallow copy keeps 80 %; recorded in the module docstring. `PUBLIC_URL` support in `lan_url()`.
+
 ## Keys present in this build
 `ANTHROPIC_API_KEY` (Q-Scientist, Host, Logic designer fallback, Financial summary), `FAL_KEY` (art, voice-over), `OUMI_API_KEY` + `OUMI_PROJECT_ID` (no deployment to call). `IBM_QUANTUM_TOKEN` empty on purpose ("no real QPU for the demo"). `DISCORD_WEBHOOK_URL` empty.
 
 ## Faked or mocked (what did NOT run for real)
+- **Front-page chip**: every roll runs on `AerSimulator.from_backend(FakeBrisbane)` with the stored calibration snapshot, never on a QPU; the label says "Simulated chip (fake backend noise model, fake_brisbane)". The fidelity number is a product of calibration errors, not a measured fidelity. Misfires (levels 7/8) are real consequences of that noise model. The "entanglement level" is a per-roll mixture of two circuits, not a continuously tuned entangling angle (reason in the log above).
 - **Logic designer: Oumi deployment not available, Claude fallback.** Project 7HBTQDVH6J-14 has no deployed model (API lists 0 models, 0 deployments); the UI shows "Claude (fallback, claude-sonnet-5-5)". When Iris is deployed, only `OUMI_DEPLOYMENT_ID` / `OUMI_MODEL` in `.env` change.
 - **Host**: Claude Haiku lines when the 5-second budget allows, templates otherwise (most lines in a busy round are templates). The checker runs on every line including templates; it caught one template during tests ("no quantum advantage claimed"), reworded.
 - **Hype or Fact cards**: seed deck + two scripted stand-in cards first; AI-written cards (Claude Haiku) from every third deal, validated by running them before they reach the table.

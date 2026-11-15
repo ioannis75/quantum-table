@@ -20,6 +20,7 @@ from beacon import beacon
 from engines import burndown, ibm
 from gatekeeper import gate
 from games import hype
+from games import chipgame
 from games.qraps import modes
 from games.qraps.modes import MODES, CROSS_RULE, RULE_TEXT
 
@@ -34,6 +35,10 @@ DAIDALOS = json.loads((ROOT / "data" / "daidalos.json").read_text()) if (ROOT / 
 
 
 def lan_url() -> str:
+    """Join URL shown on the page and in the QR. PUBLIC_URL (e.g. a tunnel or the venue address) wins when set."""
+    pub = os.environ.get("PUBLIC_URL", "").strip().rstrip("/")
+    if pub:
+        return pub
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("10.255.255.255", 1))
@@ -368,6 +373,45 @@ def index():
 @app.get("/join")
 def join_page():
     return FileResponse(ROOT / "static" / "index.html")
+
+
+@app.get("/lab")
+def lab_page():
+    return FileResponse(ROOT / "static" / "lab.html")
+
+
+# ---- the front-page game (games/chipgame.py) ---------------------------------------------------------
+@app.get("/api/game/state")
+def game_state():
+    s = chipgame.state()
+    s["region"] = chipgame.used_region()
+    s["join_url"] = lan_url() + "/join"
+    s["host_lines"] = host.recent(4)
+    return s
+
+
+@app.post("/api/game/join")
+async def game_join(req: Request):
+    b = await req.json()
+    try:
+        return chipgame.join(orch._clean_nick(b.get("nick", "Player")))
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+
+
+@app.post("/api/game/roll")
+async def game_roll(req: Request):
+    b = await req.json()
+    try:
+        return chipgame.roll(b["player"], b.get("level"), b.get("shots"))
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+
+
+@app.post("/api/game/reset")
+def game_reset():
+    chipgame.reset()
+    return {"ok": True}
 
 
 @app.get("/table")

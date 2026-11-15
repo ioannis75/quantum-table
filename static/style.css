@@ -47,3 +47,5 @@ footer{padding:14px 16px;border-top:1px solid #222}
 pre{white-space:pre-wrap;word-break:break-word}
 .waitjob{background:#3a2d10;padding:8px;border-radius:8px;margin-top:6px}
 @media (max-width:600px){.die{width:48px;height:48px;padding:6px}.who{width:44px}button.big{font-size:1.1rem;padding:12px 18px}}
+
+.die.misfire{display:flex;align-items:center;justify-content:center;font:900 2rem sans-serif;color:#e05252;background:#fff3f3}

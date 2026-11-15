@@ -12,11 +12,14 @@ A team of AI agents designs and runs quantum dice games. The first game is **Qra
 
 That creates `.venv`, installs `requirements.txt`, builds ADAP's policy engine if Node 22+ and pnpm 10+ are present, and starts on `0.0.0.0:$PORT` (default 8080). Open `http://<host>:8080/`.
 
-- `/` the table (3D by default; `?view=2d` for the 2D table; 2D is the automatic fallback without WebGL)
-- `/join` seats a player (nickname only, 100 Qredits, nothing personal stored)
+- `/` **the game, nothing else**: a craps table (3D by default; `?view=2d`, and the automatic fallback without WebGL) next to the chip map zoomed to the qubits in use. Join → your 6 qubits light up in your colour, the house's six entangled partners are red hearts. Roll → a circuit really runs (see below). Below the fold: how a roll works, the AI host, links to the rest.
+- `/lab` everything behind the table: burn-down meter, chip pricing and buy-in, Quantum Time Gatekeeper, Hype or Fact, quantum vote, beacon rounds, the five original Qraps modes, Bloch-sphere dice
+- `/join` seats a player (nickname only, 100 Qredits, nothing personal stored); the Join QR is behind the small button on the front page
 - `/table` the projector view
 - `/beacon/latest`, `/beacon/{round}` the public records; `verify_beacon.py` re-checks them
 - `/making-of` how this was built
+
+`PUBLIC_URL` in `.env` (or the environment) overrides the detected LAN address in the join URL and QR, for tunnels or a venue hostname.
 
 Keys go in `.env` (see `PROMPT.md`, "Keys"). Every key is optional: a keyless run works end to end in scripted mode and the page names the fallback in use. `.env` is git-ignored; never commit it.
 
@@ -26,6 +29,7 @@ Tests: `. .venv/bin/activate && python -m pytest -q tests` (≈100 tests, 1–3 
 
 | Part | Status |
 |---|---|
+| Front-page roll: circuit per roll, noise model of the assigned qubits, one shot, aggregate verifier | real circuits, **simulated chip** (fake backend calibration); no QPU |
 | Qraps circuits, exact odds (`fractions.Fraction`), verifier, sandbox | real, tested |
 | Emulator runs | **Qiskit Aer** statevector; burn-down measured on this machine: 29 qubits ran (26.4 s, 8.8 GB), **refused at 30** (16 B × 2³⁰ = 17.2 GB > 80 % of 16.9 GB) |
 | Q-Scientist | Claude (`claude-sonnet-5-5`) writes the circuit code; it runs only in the AST-allowlisted subprocess sandbox; the verifier decides. Fallback: scripted circuits |
@@ -39,7 +43,14 @@ Tests: `. .venv/bin/activate && python -m pytest -q tests` (≈100 tests, 1–3 
 
 Honest wording we use: "consistent with theory at the stated threshold", "correlated as the mode requires, checked by the verifier", "collectively generated, publicly checkable". We never say "certified random", "proves", "quantum advantage", "tamper-proof".
 
-## How it works
+## How a front-page roll works (`games/chipgame.py`)
+
+- Each die is a 6-level qudit in 3 physical qubits. A seat is a 12-qubit row segment of `fake_brisbane`: house die A, player die A, house die B, player die B (3 qubits each). Links on the map join each player qubit to its house partner.
+- The house die is prepared as the uniform superposition over faces 1–6; the player's die is a CNOT copy of it (entangled circuit, entanglement entropy log₂6 = 2.585 bits) or an independent uniform die (independent circuit, 0 bits). The **entanglement level** is the fraction of rolls that use the entangled circuit, drawn per roll by the emulator's seeded RNG (the coin and the choice are shown). We measured why the circuits are shallow: an exact partially-entangled pure state needs ~100 two-qubit gates after transpiling to the heavy-hex and the noise model erases the correlation (28 % equal faces at full entanglement vs 80 % for the shallow copy).
+- The circuit is transpiled to the player's physical qubits and run through the backend's noise model; the **fidelity** shown is Π(1 − error) over every gate and readout actually used, from the calibration snapshot. **One shot** decides the roll (switch: 100 shots, majority face). A reading of level 7 or 8 is a **misfire** (no result), which is what noise does to a qudit.
+- Verifier: one shot cannot be chi-square tested, so it checks the exact circuit distribution against the stated one on every roll (1e-9) and runs chi-square (ideal emulator shots) and TVD (noise-model shots) on the **aggregate** of all rolls with the same settings; the badge says so.
+
+## How the lab works
 
 - **Dice**: two 3-qubit registers; the value `face−1` is written in binary; faces 7 and 8 have zero amplitude. Each Qraps mode is prepared exactly as a uniform superposition over the original game's allowed pairs (`games/qraps/modes.py`, transcribed from `EntangledDice.cs`).
 - **Entangling with the house**: a joining player's registers are CNOT-copied from the house pair (modes Classical/Bosonic/BosonicEntangled: always equal) or copied and complemented k→7−k (Fermionic modes: always summing to 7). Our reconstruction; labelled so.

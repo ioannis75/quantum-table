@@ -18,19 +18,26 @@ scene.add(new THREE.HemisphereLight(0xffffff, 0x224422, 0.9));
 const sun = new THREE.DirectionalLight(0xffffff, 1.1); sun.position.set(4, 8, 3); scene.add(sun);
 
 /* ---- table: felt, wooden rails, original markings on a canvas texture ---- */
+function drawMarks(g) {
+  g.strokeStyle = "#e8d9a0"; g.lineWidth = 6; g.fillStyle = "#e8d9a0"; g.textAlign = "center";
+  g.strokeRect(40, 40, 944, 432);
+  g.beginPath(); g.moveTo(40, 400); g.lineTo(984, 400); g.stroke(); g.font = "bold 44px serif"; g.fillText("PASS LINE", 512, 448);
+  g.beginPath(); g.moveTo(40, 120); g.lineTo(984, 120); g.stroke(); g.fillText("HOUSE", 512, 100);
+  g.font = "bold 30px serif";
+  g.fillText("7 or 11 WINS   ·   2, 3, 12 LOSES", 512, 230);
+  g.fillText("ANY OTHER TOTAL IS YOUR POINT: ROLL IT AGAIN BEFORE A 7", 512, 290);
+  g.font = "bold 26px serif"; g.fillText("each die = 3 qubits on the chip · stake 5 Qredits · pays 1:1", 512, 350);
+}
 function feltTexture() {
   const c = document.createElement("canvas"); c.width = 1024; c.height = 512; const g = c.getContext("2d");
   g.fillStyle = "#0f5a36"; g.fillRect(0, 0, 1024, 512);
   for (let i = 0; i < 4000; i++) { g.fillStyle = `rgba(255,255,255,${Math.random() * 0.04})`; g.fillRect(Math.random() * 1024, Math.random() * 512, 2, 2); }
   g.strokeStyle = "#e8d9a0"; g.lineWidth = 6; g.font = "bold 44px serif"; g.fillStyle = "#e8d9a0"; g.textAlign = "center";
   g.strokeRect(40, 40, 944, 432);
-  g.beginPath(); g.moveTo(40, 400); g.lineTo(984, 400); g.stroke(); g.fillText("PASS LINE", 512, 448);
-  g.beginPath(); g.moveTo(40, 120); g.lineTo(984, 120); g.stroke(); g.fillText("HOUSE", 512, 100);
-  g.font = "bold 34px serif"; g.fillText("FIELD   2  3  4  9  10  11  12", 512, 330);
-  g.strokeRect(300, 150, 424, 120); g.font = "bold 30px serif"; g.fillText("COME", 512, 220);
+  drawMarks(g);
   const t = new THREE.CanvasTexture(c); t.anisotropy = 4;
   // Art director: if a fal.ai felt image exists, paint it under the markings (cached at build time, never fetched from fal at run time)
-  const img = new Image(); img.onload = () => { g.globalAlpha = 0.55; g.drawImage(img, 0, 0, 1024, 512); g.globalAlpha = 1; g.strokeStyle = "#e8d9a0"; g.lineWidth = 6; g.font = "bold 44px serif"; g.fillStyle = "#e8d9a0"; g.textAlign = "center"; g.strokeRect(40, 40, 944, 432); g.beginPath(); g.moveTo(40, 400); g.lineTo(984, 400); g.stroke(); g.fillText("PASS LINE", 512, 448); g.beginPath(); g.moveTo(40, 120); g.lineTo(984, 120); g.stroke(); g.fillText("HOUSE", 512, 100); g.font = "bold 34px serif"; g.fillText("FIELD   2  3  4  9  10  11  12", 512, 330); g.strokeRect(300, 150, 424, 120); g.font = "bold 30px serif"; g.fillText("COME", 512, 220); t.needsUpdate = true; };
+  const img = new Image(); img.onload = () => { g.globalAlpha = 0.55; g.drawImage(img, 0, 0, 1024, 512); g.globalAlpha = 1; drawMarks(g); t.needsUpdate = true; };
   img.src = "/assets/fal_felt.jpg";
   return t;
 }
@@ -64,7 +71,7 @@ const sphereMat = new THREE.MeshStandardMaterial({ color: 0x9ab4cc, transparent:
 const ringGeo = new THREE.TorusGeometry(0.22, 0.006, 6, 32);
 const ringMat = new THREE.MeshBasicMaterial({ color: 0xcfe3ff });
 const blochs = [];
-for (const [who, pair] of Object.entries(dice)) for (const d of pair) for (let i = 0; i < 3; i++) {
+if (!window.TABLE3D_SIMPLE) for (const [who, pair] of Object.entries(dice)) for (const d of pair) for (let i = 0; i < 3; i++) {
   const g = new THREE.Group(); g.position.set(d.position.x + (i - 1) * 0.5, 1.5, d.position.z);
   g.add(new THREE.Mesh(sphereGeo, sphereMat)); const ring = new THREE.Mesh(ringGeo, ringMat); ring.rotation.x = Math.PI / 2; g.add(ring);
   const arrow = new THREE.ArrowHelper(new THREE.Vector3(0, 1, 0), new THREE.Vector3(), 0.22, 0x4aa3ff, 0.08, 0.05); g.add(arrow);
