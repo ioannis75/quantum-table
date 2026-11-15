@@ -12,7 +12,6 @@
   <div id="clock" class="muted"></div>
 </header>
 
-<section id="team" class="strip" aria-label="agent team"></section>
 
 <main>
   <section class="card table-card">
@@ -59,7 +58,24 @@
     <p class="small muted">This is the cost of exact statevector simulation, not of every classical method. Engine for this phase: <b id="phase-engine"></b></p>
   </section>
 
+  
+
+  
+
+  
+
+  
+
   <section class="card">
+    <h2>Join <span class="muted small">scan, pick a nickname, 100 Qredits</span></h2>
+    <div class="row"><img id="qr" alt="QR to join" width="180" height="180"><div><div id="joinurl" class="mono"></div><div id="seats" class="small"></div></div></div>
+    <p class="small"><a href="/table" target="_blank">Projector view</a> · <a href="/beacon/latest" target="_blank">Beacon: latest record</a> · <a href="/verify_beacon.py">verify_beacon.py</a> — Don't trust us. Check it.</p>
+  </section>
+
+  
+  <details class="fold future" id="future"><summary>Extended: future plan (built, working, folded away for the demo): chip buy-in with the Quantum Time Gatekeeper, Hype or Fact, quantum voting, the AI host, three-party agreement and key exchange (<a href="/docs-img/IDEAS_byzantine_qkd.md">notes</a>)</summary>
+  <div class="future-grid">
+<section class="card">
     <h2>Chip map <span class="muted small" id="chip-label"></span></h2>
     <svg id="chip" viewBox="-1 -1 17 15" class="chipmap"></svg>
     <div class="small" id="chip-info"></div>
@@ -72,14 +88,12 @@
     </div>
     <div id="chipres" class="small"></div>
   </section>
-
-  <section class="card">
+<section class="card">
     <h2>Quantum Time Gatekeeper <span class="muted small" id="gate-credit"></span></h2>
     <div id="gatelog" class="small"></div>
     <div id="waiting"></div>
   </section>
-
-  <section class="card">
+<section class="card">
     <h2>Hype or Fact <span class="muted small">the experiment decides</span></h2>
     <div id="hype"></div>
     <div class="row">
@@ -90,25 +104,23 @@
     </div>
     <div id="hype-score" class="small muted"></div>
   </section>
-
-  <section class="card">
+<section class="card">
     <h2>Quantum vote <span class="muted small">a vote sampled from qubits; no quantum advantage claimed</span></h2>
     <button id="vote" class="ghost">Let the agents vote on the mode</button>
     <pre id="vote-out" class="small"></pre>
   </section>
-
-  <section class="card">
-    <h2>Join <span class="muted small">scan, pick a nickname, 100 Qredits</span></h2>
-    <div class="row"><img id="qr" alt="QR to join" width="180" height="180"><div><div id="joinurl" class="mono"></div><div id="seats" class="small"></div></div></div>
-    <p class="small"><a href="/table" target="_blank">Projector view</a> · <a href="/beacon/latest" target="_blank">Beacon: latest record</a> · <a href="/verify_beacon.py">verify_beacon.py</a> — Don't trust us. Check it.</p>
-  </section>
-
-  <section class="card">
+<section class="card">
     <h2>AI host <span class="muted small">live commentary · <span id="corrected"></span></span></h2>
     <ul id="ticker"></ul>
   </section>
+  </div></details>
 </main>
 
+<section class="card credits"><h2>Credits: the AI team that built this game (case study)</h2>
+  <p class="small muted">Quantum Table was built in one night by a person's ideas and a team of AI agents, each with its own role, model and fallback; a verifier made of code, not a model, had the last word on every roll. Who did what, and which model answered:</p>
+  <div id="team" class="strip credits-strip" aria-label="agent team"></div>
+  <p class="small muted">Full record: <a href="/making-of">How this was made</a>.</p>
+</section>
 <footer class="small muted">
   Qredits are play credits with no cash value. Engines: Aer emulator · Simulated chip (fake backend) · IBM backend + job ID · Recorded run.
   Qraps modes from the original Qraps (Quantum Game Jam 2021, <a href="https://github.com/SuperStingray/qraps">SuperStingray/qraps</a>); circuits and cross-table rules are our reconstruction.

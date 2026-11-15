@@ -55,3 +55,8 @@ pre{white-space:pre-wrap;word-break:break-word}
 .tomo .bar i{position:absolute;left:0;right:0;bottom:0;background:var(--blue);border-radius:4px}
 .tomo .bar b{position:absolute;left:0;right:0;border-top:2px solid var(--gold)}
 .tomo .bar span{position:absolute;left:0;right:0;bottom:-18px;text-align:center;font-size:.7rem;color:var(--muted)}
+
+.future{margin:0;grid-column:1/-1;background:var(--card);border-radius:12px;padding:10px 14px}
+.future summary{cursor:pointer;font-weight:600}
+.future-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-top:10px}
+.credits{margin:0 16px 12px}.credits-strip{padding:4px 0;flex-wrap:wrap}

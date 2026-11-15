@@ -21,6 +21,8 @@ Unattended build from `PROMPT.md`. Times are Athens (EET). Feature freeze 14:00,
 
 - 12:50–13:10 human asked to go back to the previous page design as `/`, with only the Bosonic-entangled option and many shots: mode fixed to `BosonicEntangled`, 4096 shots per roll, new "Dice tomography" card (frequencies vs exact). The chip game stays at `/chip`.
 
+- 13:00–13:15 demo trim: agent strip moved to a "Credits: the AI team that built this game" section; 1024 shots per roll; chip map, Gatekeeper, Hype or Fact, quantum vote and AI host folded into "Extended: future plan" (still working, one click away). `boxd_update.sh` added.
+
 ## Keys present in this build
 `ANTHROPIC_API_KEY` (Q-Scientist, Host, Logic designer fallback, Financial summary), `FAL_KEY` (art, voice-over), `OUMI_API_KEY` + `OUMI_PROJECT_ID` (no deployment to call). `IBM_QUANTUM_TOKEN` empty on purpose ("no real QPU for the demo"). `DISCORD_WEBHOOK_URL` empty.
 

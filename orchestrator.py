@@ -19,7 +19,7 @@ from games.qraps.modes import CROSS_RULE, MODES
 from verifier import core
 
 COMMIT_WINDOW = 1.5
-SHOTS = 4096          # many shots per roll: the outcome statistics are shown as the dice tomography panel
+SHOTS = 1024          # shots per roll: the outcome statistics are shown as the dice tomography panel
 REVEAL_TIMEOUT = 20.0
 STAKE = 5
 _lock = threading.RLock()
