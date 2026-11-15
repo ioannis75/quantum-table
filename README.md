@@ -47,7 +47,7 @@ flowchart LR
 | Agent | Job | Runs on (fallback) |
 |---|---|---|
 | Q-Scientist | writes the circuits and states the expected distribution | Claude (scripted circuits) |
-| Logic designer | rules, payouts, exact odds | Oumi requested; no deployment existed, so Claude (scripted) |
+| Logic designer | rules, payouts, exact odds, quantum-logic propositions | **Oumi** (project 7HBTQDVH6J-14, deployment 2); Claude is the fallback, labelled when used |
 | Art director | table and chip graphics | fal.ai flux (built-in SVG) |
 | Lab agent | picks where a roll runs; asks the Gatekeeper first | code + IBM runtime (fake backend) |
 | Financial agent | quotes and shadow invoices; never charges anyone | code + Claude summary (template) |
@@ -64,7 +64,7 @@ The page names the engine and model actually used for every result.
 | Qiskit circuits, exact odds, verifier, sandbox, beacon and `verify_beacon.py`, tested | Rolls run on the Aer **emulator**, not on quantum hardware |
 | Burn-down measured on our server (29 qubits ran, 30 refused) | The chip path uses IBM's **fake backend** (`FakeBrisbane`), labelled "Simulated chip": 0 real QPU seconds spent |
 | Gatekeeper decisions by ADAP's open-source policy engine | ADAP policy engine only: no signed delegation receipts |
-| Claude-written circuits pass the sandbox and the verifier | Oumi Logic designer had no deployed model, so Claude answered (shown on screen) |
+| Claude-written circuits pass the sandbox and the verifier; Oumi writes the quantum-logic propositions | The Oumi model's own probability predictions were classical-dice fractions; the kit evaluates the propositions on the real state and the page shows "Logic designer corrected" |
 
 We say "collectively generated, publicly checkable". We never say "certified random", "proves" or "quantum advantage". On the emulator, the unpredictability comes from the participants' secrets. Qredits cannot be bought, sold or cashed out, and no payment code exists.
 
@@ -77,7 +77,7 @@ git clone https://github.com/ioannis75/quantum-table && cd quantum-table
 
 Then open `http://localhost:8080/`. Built and tested on Python 3.13. Node 22 + pnpm are optional (they build ADAP's policy engine, otherwise built-in rules are used).
 
-**Keys are all optional.** Put them in `.env` (git-ignored): `ANTHROPIC_API_KEY`, `FAL_KEY`, `OUMI_API_KEY` + `OUMI_PROJECT_ID`, `IBM_QUANTUM_TOKEN`, `PUBLIC_URL`. Without keys everything still runs in scripted mode, and the page says which fallback is in use.
+**Keys are all optional.** Put them in `.env` (git-ignored): `ANTHROPIC_API_KEY`, `FAL_KEY`, `OUMI_API_KEY` + `OUMI_PROJECT_ID` + `OUMI_DEPLOYMENT_ID` + `OUMI_MODEL` + `OUMI_BASE_URL`, `IBM_QUANTUM_TOKEN`, `PUBLIC_URL`. Without keys everything still runs in scripted mode, and the page says which fallback is in use.
 
 **Tests:** `. .venv/bin/activate && python -m pytest -q tests`
 
