@@ -49,6 +49,8 @@ def join(nick: str, bot: bool = False) -> dict:
         db.q("INSERT INTO players(id,nick,qredits,seat,bot,created) VALUES(?,?,?,?,?,?)", (pid, nick, 100, seat, int(bot), time.time()))
         _T["craps"][pid] = {"point": None}
     events.emit("player_joined", {"nick": nick, "qredits": 100, "seat": seat, "qubits": qubits(), "bot": bot})
+    from agents import host
+    host.post_discord("seated", f"{len(players())} players seated, {qubits()} qubits at the table.")
     events.emit("dice_entangled", {"nick": nick, "rule": CROSS_RULE[_T["mode"]]})
     _maybe_burn_event()
     return {"id": pid, "nick": nick, "qredits": 100, "seat": seat}
@@ -70,6 +72,8 @@ def _maybe_burn_event():
         b = _burn_info()
         events.emit("burned_down", {"qubits": b["burned_down_at"], "bytes": burndown.need_bytes(b["burned_down_at"]),
                                     "measured": b["measured"]})
+        from agents import host
+        host.post_discord("burned_down", f"Emulator burned down at {b['burned_down_at']} qubits, moving to the chip.")
 
 
 def skip_ahead() -> dict:

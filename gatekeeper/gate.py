@@ -28,13 +28,15 @@ def _builtin(agent: str, tool: str, args: dict) -> dict:
     if agent == "agt_lab_agent":
         est, bud, paid = args.get("est_qpu_seconds"), args.get("budget_after_seconds"), args.get("paid_plan")
         if tool == "submit_qpu_job":
-            if isinstance(est, (int, float)) and est > 60:
+            if not isinstance(est, (int, float)) or isinstance(est, bool):
+                return d("BLOCK", "qpu_missing_estimate", "CRITICAL")
+            if est > 60:
                 return d("BLOCK", "qpu_block_over_job_cap", "CRITICAL")
             if isinstance(bud, (int, float)) and bud > 120:
                 return d("BLOCK", "qpu_block_over_budget", "CRITICAL")
             if paid is True:
                 return d("BLOCK", "qpu_block_paid_plan", "CRITICAL")
-            if isinstance(est, (int, float)) and est > 10:
+            if est > 10:
                 return d("REQUIRE_HUMAN", "qpu_medium_needs_human", "MEDIUM")
             return d("ALLOW", "qpu_small_allow")
         if tool == "run_emulator":

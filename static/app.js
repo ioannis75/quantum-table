@@ -8,7 +8,7 @@ const api = async (path, body, method) => {
 const fmtBytes = (b) => { const u = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB"]; let i = 0; while (b >= 1024 && i < u.length - 1) { b /= 1024; i++; } return b.toFixed(b < 10 ? 1 : 0) + " " + u[i]; };
 const PROJECTOR = !!window.PROJECTOR;
 const params = new URLSearchParams(location.search);
-let DEFAULT_3D = false;                 // flipped to true only after the headless WebGL check in the build passed
+let DEFAULT_3D = true;                  // set after the headless WebGL check in the build passed (docs/3d_*.png)
 let me = JSON.parse(localStorage.getItem("qt_me") || "null");
 let STATE = null, CHIP = null, selPair = null, BLOCH = null, rolling = false;
 
@@ -49,7 +49,7 @@ async function refresh() {
   $("#clock") && ($("#clock").textContent = "Athens " + s.time_athens + " · " + s.qubits + " qubits at the table · " + s.phase);
   if ($("#rule")) $("#rule").textContent = s.rule_text + (s.players.length ? "" : " (join to entangle your dice)");
   if ($("#mode") && !$("#mode").options.length) { for (const m of ["Classical", "Bosonic", "Fermionic", "BosonicEntangled", "FermionicEntangled"]) { const o = document.createElement("option"); o.value = o.textContent = m; $("#mode").appendChild(o); } }
-  if ($("#mode") && $("#mode").value !== s.mode && !rolling) { $("#mode").value = s.mode; loadDesign(s.mode); }
+  if ($("#mode") && (!BLOCH || $("#mode").value !== s.mode) && !rolling && !loadingDesign) { $("#mode").value = s.mode; loadDesign(s.mode); }
   renderTeam(s.team); renderMeter(s); renderHost(s); renderSeats(s); renderHype(s.hype);
   if ($("#gate-credit")) $("#gate-credit").textContent = s.gate_credit; for (const el of document.querySelectorAll("#gate-credit2")) el.textContent = s.gate_credit;
   if ($("#art")) $("#art").textContent = s.art;
@@ -61,7 +61,7 @@ async function refresh() {
   if (s.vote && $("#vote-out") && !$("#vote-out").textContent) $("#vote-out").textContent = JSON.stringify(s.vote, null, 1);
   if ($("#me-label")) $("#me-label").textContent = me ? me.nick : "you";
 }
-let lastShown = null;
+let lastShown = null, loadingDesign = false;
 function showResult(r) {
   lastShown = r.round;
   setDice(r.faces); renderBloch("landed", r.faces);
@@ -90,9 +90,10 @@ function renderMeter(s) {
   marks.push([s.burn.limit_n + 1, `emulator burned down at ${s.burn.burned_down_at} qubits (${s.burn.measured ? "measured" : "80% line"})`]);
   if (b.daidalos.bytes) marks.push([qOf(b.daidalos.bytes), b.daidalos.label]); else marks.push([46, b.daidalos.label + " (no public figure)"]);
   marks.push([50, "~50 qubits: no classical machine follows"]);
-  $("#marks").innerHTML = marks.map(([x, t], i) => `<div class="mark" style="left:${Math.min(99, x / maxQ * 100)}%"><span style="top:${i % 2 ? 34 : -22}px">${t}</span></div>`).join("");
+  $("#marks").innerHTML = marks.map(([x, t], i) => `<div class="mark" style="left:${Math.min(99, x / maxQ * 100)}%" title="${t}"><span>${i + 1}</span></div>`).join("");
+  const legend = marks.map(([x, t], i) => `<span class="muted">${i + 1}. ${t} (${Math.round(x)} q)</span>`).join(" · ");
   const pr = b.probes.filter(p => p.ok).slice(-1)[0];
-  $("#meter-text").innerHTML = `<b>${q} qubits</b> → ${fmtBytes(s.bytes_needed)} of statevector. Aer emulator ran ${b.probes.filter(p => p.ok).length ? Math.max(...b.probes.filter(p => p.ok).map(p => p.n)) : "?"} qubits here${pr ? ` (${pr.seconds.toFixed(1)} s, ${fmtBytes(pr.rss || 0)} RSS)` : ""}; ${b.burned_down_at ? `refused at ${b.burned_down_at}` : "80% line at " + (b.analytic_limit_n + 1)}. ${s.phase === "chip" ? "<b>Emulator burned down at " + s.burn.burned_down_at + " qubits.</b> The chip takes over." : ""}`;
+  $("#meter-text").innerHTML = `<div class="small">${legend}</div><b>${q} qubits</b> → ${fmtBytes(s.bytes_needed)} of statevector. Aer emulator ran ${b.probes.filter(p => p.ok).length ? Math.max(...b.probes.filter(p => p.ok).map(p => p.n)) : "?"} qubits here${pr ? ` (${pr.seconds.toFixed(1)} s, ${fmtBytes(pr.rss || 0)} RSS)` : ""}; ${b.burned_down_at ? `refused at ${b.burned_down_at}` : "80% line at " + (b.analytic_limit_n + 1)}. ${s.phase === "chip" ? "<b>Emulator burned down at " + s.burn.burned_down_at + " qubits.</b> The chip takes over." : ""}`;
 }
 function renderHost(s) {
   const t = $("#ticker"); if (!t) return;
@@ -115,12 +116,14 @@ function renderHype(h) {
   if ($("#hype-score")) $("#hype-score").textContent = `Experiment ${h.experiments}, AI claims ${h.ai_claims_survived} (of ${h.ai_claims_total} AI-written; ${h.discarded} uncomputable cards discarded)`;
 }
 async function loadDesign(mode) {
+  loadingDesign = true;
   try {
     const [d, b] = await Promise.all([api("/api/design/" + mode), api("/api/bloch/" + mode)]);
     BLOCH = b;
     if ($("#design")) $("#design").textContent = `Q-Scientist (${d.source}) · commit ${d.hash.slice(0, 16)}… · ${d.pairs} allowed pairs · pass-line win ${d.win_fraction} = ${d.win.toFixed(4)}\nLogic designer (${d.logic.source})${d.logic.corrected ? " · CORRECTED by enumeration" : ""}: P(win at come-out)=${d.logic.p_win_comeout.toFixed(4)} P(lose)=${d.logic.p_lose_comeout.toFixed(4)}\n\n${d.code}`;
     if (!rolling) renderBloch(STATE && STATE.players.length ? "entangled" : "prepared");
   } catch (e) { }
+  loadingDesign = false;
 }
 
 /* ---------- commit-reveal roll (the browser holds the secret) ---------- */

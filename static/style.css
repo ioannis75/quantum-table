@@ -19,7 +19,7 @@ select,input{font-size:1rem;padding:6px;border-radius:8px;border:1px solid #333;
 .badge{padding:8px 14px;border-radius:999px;font-weight:700;background:#2a3240}
 .badge.ok{background:var(--ok);color:#042}.badge.bad{background:var(--bad)}.badge.warn{background:var(--warn);color:#321}
 .table2d .felt{background:radial-gradient(ellipse at center,#15774a,var(--felt) 70%);border:8px solid #5a3b1e;border-radius:120px/60px;padding:18px;position:relative;min-height:260px}
-.felt::before{content:"PASS LINE";position:absolute;left:0;right:0;top:46%;text-align:center;color:var(--gold);font:700 1.6rem serif;letter-spacing:.3em;opacity:.55}
+.felt::before{content:"PASS LINE";position:absolute;left:0;right:0;top:8px;text-align:center;color:var(--gold);font:700 1.6rem serif;letter-spacing:.3em;opacity:.55}
 .dice-row{display:flex;gap:16px;align-items:center;justify-content:center;margin:6px 0}.who{color:var(--gold);width:60px;text-align:right;font-size:.9rem}
 .die{width:64px;height:64px;background:#fafafa;border-radius:12px;display:grid;grid-template-columns:repeat(3,1fr);padding:8px;gap:4px;box-shadow:0 4px 10px #0007;transition:transform .2s}
 .die.rolling{animation:tumble .5s linear infinite}
@@ -30,10 +30,10 @@ select,input{font-size:1rem;padding:6px;border-radius:8px;border:1px solid #333;
 .bloch-row{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
 .bloch{width:46px;height:46px}
 .result{min-height:1.6em;font-size:1.1rem}
-.meter-wrap{position:relative;height:28px;background:#0e1116;border-radius:8px;overflow:visible;margin:18px 0 26px}
+.meter-wrap{position:relative;height:28px;background:#0e1116;border-radius:8px;overflow:visible;margin:22px 0 10px}
 .meter{height:100%;background:linear-gradient(90deg,var(--ok),var(--warn),var(--bad));border-radius:8px;width:0;transition:width .5s}
 .marks{position:absolute;inset:0}.mark{position:absolute;top:-6px;bottom:-6px;border-left:2px dashed #fff8;font-size:.7rem;padding-left:4px;white-space:nowrap}
-.mark span{position:absolute;top:34px;left:-2px;color:var(--muted)}
+.mark span{position:absolute;top:-16px;left:-5px;color:var(--fg);font-weight:700}
 .chipmap{width:100%;max-height:360px;background:#0b1d3a;border-radius:10px}
 .chipmap .q{fill:#4aa3ff}.chipmap .e{stroke-width:.25;cursor:pointer}.chipmap .e.sel{stroke:#fff;stroke-width:.5}.chipmap .e.taken{stroke:#e05252}
 .gate{display:grid;grid-template-columns:auto auto auto 1fr auto;gap:4px 10px;font-family:ui-monospace,monospace;font-size:.78rem}

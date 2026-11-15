@@ -22,7 +22,7 @@ T = {
     "roll_result": lambda d: f"Round {d.get('round','')} is in: faces {d.get('faces','')} on {d.get('engine','the emulator')}. The measurement decided, not the animation.",
     "verifier_verdict": lambda d: f"Verifier says {d.get('badge','?')}. The badge comes from code, not from me.",
     "hype_verdict": lambda d: ("The experiment says: Fact." if d.get("truth") else "The experiment says: Hype.") + f" {d.get('headline','')}".rstrip(),
-    "quantum_vote": lambda d: f"The agents voted with qubits and picked {d.get('winner','a variant')}. A vote sampled from qubits; no quantum advantage claimed.",
+    "quantum_vote": lambda d: f"The agents voted with qubits and picked {d.get('winner','a variant')}. A vote sampled from qubits, nothing more is claimed.",
     "gatekeeper": lambda d: f"Quantum Time Gatekeeper decision: {d.get('action','?')} under rule {d.get('rule','?')}.",
     "burned_down": lambda d: f"The emulator burned down at {d.get('qubits','?')} qubits. Exact statevector simulation ran out of memory; the chip takes over.",
     "chip_job_submitted": lambda d: f"Chip job {d.get('job_hash','')} submitted on {d.get('label','the chip')}, estimated {d.get('est','?')} QPU seconds.",
