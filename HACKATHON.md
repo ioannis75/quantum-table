@@ -47,6 +47,9 @@ Unattended build from `PROMPT.md`. Times are Athens (EET). Feature freeze 14:00,
 - The QPU-second estimate: `circuits × shots × (250 µs rep delay + 20 µs exec) + 2 s`.
 - Pass-line stake 5 Qredits, payout 1:1; Hype or Fact 5 Qredits, 1:1.
 
+## Ideas noted, not implemented
+- Three-party Byzantine agreement with the house (three-qutrit singlet) and BB84/E91 key exchange feeding the beacon: `docs/IDEAS_byzantine_qkd.md`. Not started before the freeze.
+
 ## Cut
 - Pagonis emulator: removed by the human in the final brief (not built).
 - Model-supplied vote confidences: scripted instead (one line of work, not on the Roll → badge → burn-down → chip path).
