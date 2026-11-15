@@ -5,3 +5,7 @@ __pycache__/
 data/*.db
 vendor/
 node_modules/
+video/raw/
+video/work/
+video/stills_qr.png
+data/*.log

@@ -1,0 +1,34 @@
+{
+ "duration_s": 154.78,
+ "ok_duration": true,
+ "streams": [
+  "video",
+  "audio"
+ ],
+ "voice": true,
+ "captions": "burned-in (video/captions.srt)",
+ "frame_mean_brightness": {
+  "10": 227.01921103395063,
+  "50": 37.14152536651235,
+  "90": 26.431461709104937
+ },
+ "ok_not_black": true,
+ "segment_lengths": [
+  8.35,
+  6.8,
+  5.65,
+  7.8,
+  10.35,
+  6.32,
+  13.0,
+  7.6,
+  10.62,
+  6.65,
+  7.52,
+  8.07,
+  20.03,
+  16.0,
+  13.45,
+  6.55
+ ]
+}

@@ -15,20 +15,22 @@ def anthropic_ask(system: str, user: str, tier: str = "smart", max_tokens: int =
     if not config.has("ANTHROPIC_API_KEY"):
         raise NoModel("no ANTHROPIC_API_KEY")
     import anthropic
-    c = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"], timeout=timeout)
+    c = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"], base_url="https://api.anthropic.com", timeout=timeout)
     model = ANTHROPIC_MODELS[tier]
     r = c.messages.create(model=model, max_tokens=max_tokens, system=system, messages=[{"role": "user", "content": user}])
     return "".join(b.text for b in r.content if getattr(b, "type", "") == "text"), f"Claude ({model})"
 
 
 def oumi_ask(system: str, user: str, max_tokens: int = 700, timeout: float = 25.0):
-    if not (config.has("OUMI_API_KEY") and config.has("OUMI_DEPLOYMENT_ID")):
-        raise NoModel("no OUMI key/deployment")
+    if not (config.has("OUMI_API_KEY") and config.has("OUMI_PROJECT_ID") and (config.has("OUMI_MODEL") or config.has("OUMI_DEPLOYMENT_ID"))):
+        raise NoModel("Oumi deployment not available")
+    # Oumi (OpenAI-compatible): model = projects/{project}/deployments/{deployment} (OUMI_MODEL, or built from the ids)
+    model = os.environ.get("OUMI_MODEL") or f"projects/{os.environ['OUMI_PROJECT_ID']}/deployments/{os.environ['OUMI_DEPLOYMENT_ID']}"
     from openai import OpenAI
     c = OpenAI(base_url="https://api.oumi.ai/inference/v1", api_key=os.environ["OUMI_API_KEY"], timeout=timeout)
-    r = c.chat.completions.create(model=os.environ["OUMI_DEPLOYMENT_ID"], max_tokens=max_tokens,
+    r = c.chat.completions.create(model=model, max_tokens=max_tokens,
                                   messages=[{"role": "system", "content": system}, {"role": "user", "content": user}])
-    return r.choices[0].message.content, "Oumi"
+    return r.choices[0].message.content, "Oumi (" + model.rsplit("/", 1)[-1] + ")"
 
 
 def ask_with_fallback(chain: list, system: str, user: str, **kw):

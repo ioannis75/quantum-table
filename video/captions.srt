@@ -1,0 +1,89 @@
+1
+00:00:00,100 --> 00:00:08,250
+Quantum Table. A craps game where AI agents design the dice
+and nobody at the table controls the roll alone.
+
+2
+00:00:08,449 --> 00:00:15,049
+Who checks the AI? The experiment. A verifier made of code,
+not a model, checks every roll.
+
+3
+00:00:15,249 --> 00:00:20,699
+Every roll is published. Anyone can recompute it. Don't
+trust us; check it.
+
+4
+00:00:20,899 --> 00:00:28,499
+Superposition: before the roll each die is a mix of all six
+faces. Six faces, three qubits per die.
+
+5
+00:00:28,699 --> 00:00:38,849
+Entanglement: your dice and the house's agree without either
+being fixed in advance. Each qubit's arrow shrinks: alone,
+it has no state of its own.
+
+6
+00:00:39,049 --> 00:00:45,174
+Measurement: looking gives one answer, and the pair falls
+apart. One roll, one outcome.
+
+7
+00:00:45,374 --> 00:00:58,174
+The fourth resource is classical memory. Exact simulation
+doubles per qubit. On this machine the emulator ran 29
+qubits and was refused at 30. Then a chip takes over.
+
+8
+00:00:58,374 --> 00:01:05,774
+Hype or Fact. The AI host deals a claim. Players bet
+Qredits, play credits with no cash value.
+
+9
+00:01:05,974 --> 00:01:16,399
+The experiment: the player does three different things to
+their dice. The house's own distribution changes by four
+times ten to the minus sixteen. Nothing.
+
+10
+00:01:16,599 --> 00:01:23,049
+Verdict: Hype. Correlation is not communication. The
+verifier decided, not the host.
+
+11
+00:01:23,249 --> 00:01:30,575
+Schrödinger's cat is really a question: where does one
+outcome come from, when the equations keep every branch?
+
+12
+00:01:30,774 --> 00:01:38,650
+Spooky action: the dice agree instantly, yet no message
+passes. You only see the agreement when you compare notes.
+
+13
+00:01:38,849 --> 00:01:58,675
+Many worlds reads the same equations as every outcome
+happening in a branch. Copenhagen-style readings stop at the
+measurement. Pilot-wave readings add hidden positions. They
+are interpretations: all predict the same dice statistics,
+so this table cannot tell you which is right. Physicists
+disagree.
+
+14
+00:01:58,875 --> 00:02:14,675
+What is real today: the circuits, the verifier, the Aer
+emulator runs, the beacon, the ADAP policy gate. What is
+simulated: the chip, a fake backend. Everything in this
+video ran on an emulator; nothing ran on a quantum chip.
+
+15
+00:02:14,875 --> 00:02:28,125
+Qraps modes from the Quantum Game Jam 2021 game. Gatekeeper
+on ADAP's policy engine. Built by a person's ideas, agents
+doing the building, and checks deciding what stayed.
+
+16
+00:02:28,324 --> 00:02:34,675
+Narration and images AI-generated. Results from real runs;
+ids in the repo.

@@ -21,10 +21,10 @@ def ensure_assets() -> dict:
         if not p.exists():
             p.write_text(svg)
         out[name] = "built-in SVG art"
-    for f in ASSETS.glob("fal_*.png"):
+    for f in ASSETS.glob("fal_*.jpg"):
         out[f.name] = "fal.ai (cached)"
     return out
 
 
 def source() -> str:
-    return "fal.ai (cached images)" if list(ASSETS.glob("fal_*.png")) else "built-in SVG art"
+    return "fal.ai (cached images, flux/schnell)" if list(ASSETS.glob("fal_*.jpg")) else "built-in SVG art"

@@ -11,26 +11,31 @@ Unattended build from `PROMPT.md`. Times are Athens (EET). Feature freeze 14:00,
 - 04:14 3D table (Three.js 0.170.0 vendored) renders headlessly with SwiftShader: 85 draw calls, no console errors; `docs/3d_before_roll.png`, `docs/3d_entangled.png`, `docs/3d_landed.png` are non-blank and differ. 3D is the default; `?view=2d` and the no-WebGL fallback keep the 2D table.
 - 04:20 **Milestone B**: join → entangle → commit-reveal round → beacon record → `verify_beacon.py` PASS; skip-ahead seats bots until the emulator phase ends at 30 qubits; chip job on the fake backend with per-pair TVD and a shadow invoice.
 
+- 04:20–04:28 the human supplied `FAL_KEY`, `ANTHROPIC_API_KEY`, `OUMI_API_KEY` + project id during the build. The egress allowlist was extended for `fal.run`, `queue.fal.run`, `v3b.fal.media`, `api.oumi.ai`, `api.anthropic.com`.
+- 04:26 video rendered: 154.8 s, 1080p, fal.ai Kokoro stock voice, burned-in captions, 3 frames non-black (`video/CHECK.json`).
+- 04:27 Q-Scientist on Claude Sonnet: model-written circuits pass the sandbox and the verifier for every mode tried.
+- 04:59 Oumi status (from the platform side): no deployment exists yet; ids left empty. Logic designer parser made tolerant of the planned Iris contract; Claude fallback labelled "Claude (fallback, …)".
+- 05:10 final test run, docs, commit.
+
 ## Keys present in this build
-None. `.env` was empty: every agent row ran on its fallback. The code paths for the real services exist and are wired (see "Untested" below).
+`ANTHROPIC_API_KEY` (Q-Scientist, Host, Logic designer fallback, Financial summary), `FAL_KEY` (art, voice-over), `OUMI_API_KEY` + `OUMI_PROJECT_ID` (no deployment to call). `IBM_QUANTUM_TOKEN` empty on purpose ("no real QPU for the demo"). `DISCORD_WEBHOOK_URL` empty.
 
 ## Faked or mocked (what did NOT run for real)
-- **Q-Scientist**: scripted circuits (no `ANTHROPIC_API_KEY`). The scripted code still goes through the same AST sandbox and verifier as model code would.
-- **Logic designer**: scripted quantum-logic statements (no Oumi key; the Claude fallback also needs a key). `api.oumi.ai` is also not reachable from the build box.
-- **Art director**: built-in SVG/canvas art (no `FAL_KEY`; `fal.run`/`fal.ai` not reachable from the build box). No fal.ai image was generated.
-- **Host**: template commentary only; the number/banned-phrase checker runs on every line, including templates (it caught one template: "no quantum advantage claimed" contains a banned phrase; reworded).
-- **Hype or Fact cards**: seed deck + two scripted stand-in cards. No AI-written cards (no key). The score line therefore shows "AI claims 0 of 0".
+- **Logic designer: Oumi deployment not available, Claude fallback.** Project 7HBTQDVH6J-14 has no deployed model (API lists 0 models, 0 deployments); the UI shows "Claude (fallback, claude-sonnet-5-5)". When Iris is deployed, only `OUMI_DEPLOYMENT_ID` / `OUMI_MODEL` in `.env` change.
+- **Host**: Claude Haiku lines when the 5-second budget allows, templates otherwise (most lines in a busy round are templates). The checker runs on every line including templates; it caught one template during tests ("no quantum advantage claimed"), reworded.
+- **Hype or Fact cards**: seed deck + two scripted stand-in cards first; AI-written cards (Claude Haiku) from every third deal, validated by running them before they reach the table.
+- **Quantum vote confidences**: scripted from exact numbers; with more time the agents would supply them from their own answers.
 - **Chip**: every chip result is **"Simulated chip (fake backend)"** = `FakeBrisbane` from `qiskit_ibm_runtime.fake_provider` (127 qubits, 144 couplers, stored calibration snapshot, not live). No `IBM_QUANTUM_TOKEN`, so **0 real QPU seconds** were used. The "noise-model Aer" comparison on the fake backend uses the same noise model that generated the data, so agreement is expected (said on screen).
 - **IBM price**: `www.ibm.com/quantum/pricing` could not be fetched (host not allowed from the build box) → "price unavailable", quotes in QPU seconds only. No price was typed from memory.
 - **Daidalos memory**: no official total-memory figure found (sources in `data/daidalos.json`); shown as "Daidalos (Greek EuroHPC system)" without a number.
 - **Discord**: no webhook → messages written to `DISCORD_POSTS.md`.
-- **Video voice-over**: none (no `FAL_KEY`); burned-in captions only.
-- **Quantum vote confidences**: scripted from exact numbers (fairness, entanglement visibility, entropy); with keys the agents would supply them.
+- **Video**: voice is a stock synthetic voice (fal.ai Kokoro `af_heart`), stills are PIL-drawn abstract art; footage is the real page. "Narration and images AI-generated" on the end card.
+- **Art**: 3 fal.ai images (`flux/schnell`) cached in `assets/`, used as felt texture; dice and chip map remain code-drawn.
 
 ## Untested code paths (written, not exercised)
 - `engines/ibm._run_ibm()` (SamplerV2 submission, usage read-back) — no token, and `docs.quantum.ibm.com` was not reachable to confirm the current interface.
-- `agents/llm.oumi_ask()` — OpenAI-compatible call, host unreachable.
-- fal.ai image / TTS generation — not written beyond the hook (no key, host unreachable).
+- `agents/llm.oumi_ask()` against a real deployment — the call path was exercised (400/404 answers from the API), never a successful completion.
+- The Iris output-contract parser (`agents/logic_designer.parse_expr/normalise`) is unit-tested on synthetic input only.
 
 ## Decisions ("our reconstruction")
 - Qraps' five modes sample uniformly from fixed pair lists (`EntangledDice.cs`). We prepare that exact superposition on two 3-qubit registers (`prepare_state`); faces 7 and 8 have amplitude 0.
@@ -40,7 +45,9 @@ None. `.env` was empty: every agent row ran on its fallback. The code paths for 
 - Pass-line stake 5 Qredits, payout 1:1; Hype or Fact 5 Qredits, 1:1.
 
 ## Cut
-(none yet)
+- Pagonis emulator: removed by the human in the final brief (not built).
+- Model-supplied vote confidences: scripted instead (one line of work, not on the Roll → badge → burn-down → chip path).
+- Real QPU job: off by the human's instruction for the demo.
 
 ## Counters at the end of the build
-(filled in by the final report)
+See `MAKING_OF.md` ("Counters"): 23 ALLOW / 2 BLOCK Gatekeeper decisions, 11 beacon rounds, 6 Hype or Fact experiments, 0 real QPU seconds, 0 Logic designer corrections, 0 model Host lines corrected (1 template reworded in tests).

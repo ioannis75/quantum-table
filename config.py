@@ -5,7 +5,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parent
-KEYS = ["ANTHROPIC_API_KEY", "OUMI_API_KEY", "OUMI_PROJECT_ID", "OUMI_DEPLOYMENT_ID",
+KEYS = ["ANTHROPIC_API_KEY", "OUMI_API_KEY", "OUMI_PROJECT_ID", "OUMI_DEPLOYMENT_ID", "OUMI_MODEL",
         "FAL_KEY", "IBM_QUANTUM_TOKEN", "DISCORD_WEBHOOK_URL", "SERVICE_MARGIN_PCT", "PORT"]
 
 

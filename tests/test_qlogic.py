@@ -48,3 +48,16 @@ def test_implies():
     assert ql.implies(ql.total(7), ql.NOT(ql.total(11)))
     assert ql.implies(ql.AND(ql.face(0, 3), ql.face(1, 4)), ql.total(7))
     assert not ql.implies(ql.total(7), ql.face(0, 3))
+
+
+def test_logic_designer_contract_parser():
+    from agents.logic_designer import parse_expr, normalise
+    e = parse_expr("sum(0,1)==7 OR sum(0,1)==11")
+    assert e == {"op": "or", "args": [{"atom": "sum", "n": 7}, {"atom": "sum", "n": 11}]}
+    assert parse_expr("NOT face(0,3) AND qubit(0,X,1)")["op"] == "and"
+    n = normalise({"task": "x", "propositions": [{"name": "win", "expr": "sum(0,1)==7"}, {"name": "point_4", "expr": "sum(0,1)==4"}],
+                   "queries": [], "prediction": {"win": "6/36"}})
+    assert n["win"] == {"atom": "sum", "n": 7} and "4" in n["points"] and n["prediction"]["win"] == "6/36"
+    import pytest
+    with pytest.raises(ValueError):
+        normalise({"status": "needs_clarification", "reason": "?"})

@@ -28,7 +28,11 @@ function feltTexture() {
   g.beginPath(); g.moveTo(40, 120); g.lineTo(984, 120); g.stroke(); g.fillText("HOUSE", 512, 100);
   g.font = "bold 34px serif"; g.fillText("FIELD   2  3  4  9  10  11  12", 512, 330);
   g.strokeRect(300, 150, 424, 120); g.font = "bold 30px serif"; g.fillText("COME", 512, 220);
-  const t = new THREE.CanvasTexture(c); t.anisotropy = 4; return t;
+  const t = new THREE.CanvasTexture(c); t.anisotropy = 4;
+  // Art director: if a fal.ai felt image exists, paint it under the markings (cached at build time, never fetched from fal at run time)
+  const img = new Image(); img.onload = () => { g.globalAlpha = 0.55; g.drawImage(img, 0, 0, 1024, 512); g.globalAlpha = 1; g.strokeStyle = "#e8d9a0"; g.lineWidth = 6; g.font = "bold 44px serif"; g.fillStyle = "#e8d9a0"; g.textAlign = "center"; g.strokeRect(40, 40, 944, 432); g.beginPath(); g.moveTo(40, 400); g.lineTo(984, 400); g.stroke(); g.fillText("PASS LINE", 512, 448); g.beginPath(); g.moveTo(40, 120); g.lineTo(984, 120); g.stroke(); g.fillText("HOUSE", 512, 100); g.font = "bold 34px serif"; g.fillText("FIELD   2  3  4  9  10  11  12", 512, 330); g.strokeRect(300, 150, 424, 120); g.font = "bold 30px serif"; g.fillText("COME", 512, 220); t.needsUpdate = true; };
+  img.src = "/assets/fal_felt.jpg";
+  return t;
 }
 const felt = new THREE.Mesh(new THREE.BoxGeometry(10, 0.3, 5), [new THREE.MeshStandardMaterial({ color: 0x0f5a36 }), new THREE.MeshStandardMaterial({ color: 0x0f5a36 }),
   new THREE.MeshStandardMaterial({ map: feltTexture(), roughness: 0.95 }), new THREE.MeshStandardMaterial({ color: 0x0b3d24 }), new THREE.MeshStandardMaterial({ color: 0x0f5a36 }), new THREE.MeshStandardMaterial({ color: 0x0f5a36 })]);

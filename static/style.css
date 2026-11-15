@@ -18,7 +18,7 @@ select,input{font-size:1rem;padding:6px;border-radius:8px;border:1px solid #333;
 .muted{color:var(--muted)}.small{font-size:.85rem}.mono{font-family:ui-monospace,monospace}.hidden{display:none}
 .badge{padding:8px 14px;border-radius:999px;font-weight:700;background:#2a3240}
 .badge.ok{background:var(--ok);color:#042}.badge.bad{background:var(--bad)}.badge.warn{background:var(--warn);color:#321}
-.table2d .felt{background:radial-gradient(ellipse at center,#15774a,var(--felt) 70%);border:8px solid #5a3b1e;border-radius:120px/60px;padding:18px;position:relative;min-height:260px}
+.table2d .felt{background:radial-gradient(ellipse at center,#15774a99,var(--felt) 70%),url(/assets/fal_felt.jpg) center/cover,var(--felt);border:8px solid #5a3b1e;border-radius:120px/60px;padding:18px;position:relative;min-height:260px}
 .felt::before{content:"PASS LINE";position:absolute;left:0;right:0;top:8px;text-align:center;color:var(--gold);font:700 1.6rem serif;letter-spacing:.3em;opacity:.55}
 .dice-row{display:flex;gap:16px;align-items:center;justify-content:center;margin:6px 0}.who{color:var(--gold);width:60px;text-align:right;font-size:.9rem}
 .die{width:64px;height:64px;background:#fafafa;border-radius:12px;display:grid;grid-template-columns:repeat(3,1fr);padding:8px;gap:4px;box-shadow:0 4px 10px #0007;transition:transform .2s}
