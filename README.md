@@ -89,6 +89,7 @@ Then open `http://localhost:8080/`. Built and tested on Python 3.13. Node 22 + p
 | `/chip` | alternative game: each die as 3 physical qubits through the fake backend's noise model |
 | `/beacon/latest`, `/beacon/{round}` | public roll records |
 | `/making-of` | how the agent team built this |
+- Agree round: two players plus the house share a three-qutrit singlet; inconsistent reports are detected (illustration, emulator only). On `/lab`, under *Extended: future plan*.
 
 ## Next
 

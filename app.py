@@ -21,6 +21,7 @@ from engines import burndown, ibm
 from gatekeeper import gate
 from games import hype
 from games import chipgame
+from games import byzantine
 from games.qraps import modes
 from games.qraps.modes import MODES, CROSS_RULE, RULE_TEXT
 
@@ -383,6 +384,13 @@ def lab_page():
 @app.get("/chip")
 def chip_page():
     return FileResponse(ROOT / "static" / "chip.html")
+
+
+@app.post("/api/byzantine/run")
+def byzantine_run():
+    r = byzantine.run()
+    events.emit("verifier_verdict", {"round": "three-party singlet", "badge": r["badge"]})
+    return {k: v for k, v in r.items() if k not in ("counts", "rotated_counts")} | {"outcomes": sorted(r["counts"].items())[:6]}
 
 
 # ---- the front-page game (games/chipgame.py) ---------------------------------------------------------

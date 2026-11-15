@@ -56,7 +56,7 @@ Unattended build from `PROMPT.md`. Times are Athens (EET). Code freeze 18:00 (mo
 - Pass-line stake 5 Qredits, payout 1:1; Hype or Fact 5 Qredits, 1:1.
 
 ## Ideas noted, not implemented
-- Three-party Byzantine agreement with the house (three-qutrit singlet) and BB84/E91 key exchange feeding the beacon: `docs/IDEAS_byzantine_qkd.md`. Not started before the freeze.
+- Three-party Byzantine agreement and BB84/E91 key exchange: `docs/IDEAS_byzantine_qkd.md`. **Step 1 built after the human's go-ahead (16:40–17:00)**: `games/byzantine.py`, the three-qutrit singlet on 2 qubits per qutrit, exact distribution checked to 1e-9, chi-square and TVD on shots, invariance under a random common basis (U⊗U⊗U), "all three different" rule and a liar demo; button in the folded future-plan section, `/api/byzantine/run`. Steps 2–5 not built.
 
 ## Cut
 - Pagonis emulator: removed by the human in the final brief (not built).
