@@ -13,6 +13,8 @@ AI agents run a quantum craps table. Your dice are entangled with the house's di
 &nbsp;
 <img src="docs/front_phone.png" width="190" alt="The table on a phone">
 
+<sub>Video file in the repo: [`video/quantum-table-60s.mp4`](video/quantum-table-60s.mp4)</sub>
+
 *Built solo at the Gen AI Summit agents hackathon, Spata, 14–15 Nov 2026, by **Ioannis Theodonis** (NTUA, quantum computers & technologies lab) and a team of eight AI agents.*
 
 </div>
